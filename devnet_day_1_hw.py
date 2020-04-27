@@ -37,7 +37,6 @@ def scan_device(device):
     if 'CDP is not enabled' in cdp_check:
         cdp = 'CDP is OFF'
     else:
-        
         # Проверяем соседей (сразу делим вывод на секции по соседям)
         cdp_neighbors = ssh_handler.send_command('show cdp neighbors detail').split('\n')
         cdp_nei_num = 0
@@ -60,8 +59,7 @@ def scan_device(device):
         reg_match = re.findall(r'(?<=Version\s).*?(?=\s)', sw_check)
         image_version = reg_match[0]
         reg_match = re.findall(r'(?<=\().*?(?=\))', sw_check)
-        image_type = reg_match[0]
-        
+        image_type = reg_match[0]     
     else:
         # Отделяем носитель
         image_type = sw_check[0].split(':')[1]
@@ -82,14 +80,12 @@ def scan_device(device):
     # Проверяем доступность предполагаемого NTP
     print('Configuring NTP')
     ntp_check = ssh_handler.send_command(f'ping {NTP_SERVER}').split('\n')[-1]
-    
     success_rate = int(ntp_check.split(' ')[3])
     if success_rate > 0:
         ntp_available = True
     else:
         ntp_available = False
-    # Настраиваем часовой пояс и NTP
-    
+    # Настраиваем часовой пояс и NTP 
     command_list = [
         'clock timezone GMT 0 0',
         f'ntp server {NTP_SERVER}'
@@ -105,13 +101,9 @@ def scan_device(device):
     else:
         ntp_sync = 'Clock in Sync'
 
-
-    
     output_string = f'{device["hostname"]}|{chassis}|{image_version}|{image_type}|{cdp}|{ntp_sync}'
     print(output_string)
     
-    
-        
 
 if __name__ == '__main__':
     import logging
