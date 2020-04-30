@@ -1,0 +1,16 @@
+---
+catalyst:
+  username: user
+  password: password
+  platform: ios
+  data:
+    type: switch
+
+nexus:
+  username: user
+  password: password
+  data:
+    type: switch
+  connection_options:
+    netmiko:
+      platform: cisco_nxos
